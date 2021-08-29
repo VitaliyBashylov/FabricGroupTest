@@ -30,7 +30,10 @@ namespace FabricGroup.TestTask.ConsoleRunner.Ledger
             if (!_factories.ContainsKey(command))
                 throw new ApplicationException($"unknown command {command} in {input}");
 
-            return _factories[command]();
+            var result = _factories[command]();
+            result.Load(input);
+
+            return result;
         }
 
         public async Task Execute(IEnumerable<ILedgerCommand> commands)

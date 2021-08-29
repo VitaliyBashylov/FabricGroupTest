@@ -10,6 +10,11 @@ namespace FabricGroup.TestTask.ConsoleRunner
     {
         static async Task Main(string[] args)
         {
+            if (args.Length != 1)
+            {
+                Console.WriteLine("usage: geektrust.exe <pathToInput>");
+                return;
+            }
             var cp = new CommandProcessor(new ConsoleOutput());
             cp.RegisterCommand("balance", () => new BalanceCommand(new BalanceCalculator()));
             cp.RegisterCommand("loan", () => new LoanCommand());

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace FabricGroup.TestTask.ConsoleRunner.Ledger.Commands
 {
@@ -6,26 +7,29 @@ namespace FabricGroup.TestTask.ConsoleRunner.Ledger.Commands
     {
         public record Data(BankBorrower BankBorrower, decimal LumpAmount, int EmiNo);
 
-        private Data _data;
+        public Data CommandData { get; set; }
+
         public void Load(string input)
         {
             var split = input.Split(" ");
-            _data = new Data(
+            CommandData = new Data(
                 new BankBorrower(split[1], split[2]), 
                 decimal.Parse(split[3]), 
                 int.Parse(split[4])
                 );
         }
-        public void SetData(Data data) => _data = data;
 
         public Task Execute(LedgerContext context, IOutput output)
         {
-            var bd = context[_data.BankBorrower];
+            if (!context.HasBorrower(CommandData.BankBorrower))
+                throw new ApplicationException("Loan has to be issues before issuing Payment command");
+            
+            var bd = context[CommandData.BankBorrower];
 
-            context[_data.BankBorrower] = bd with
+            context[CommandData.BankBorrower] = bd with
             {
-                LumpAmount = _data.LumpAmount,
-                EmisPaid = _data.EmiNo
+                LumpAmount = CommandData.LumpAmount,
+                EmisPaid = CommandData.EmiNo
             };
 
             return Task.CompletedTask;
