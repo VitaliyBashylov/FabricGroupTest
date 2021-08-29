@@ -28,6 +28,7 @@ namespace FabricGroup.TestTask.Ledger.Tests
         {
             _command.Load("LOAN IDIDI Dale 10000 5 4");
             
+            Assert.AreEqual(new BankBorrower("IDIDI", "Dale"), _command.CommandData.BankBorrower);
             Assert.AreEqual(0.04m, _command.CommandData.Interest);
             Assert.AreEqual(10000, _command.CommandData.Principal);
             Assert.AreEqual(5, _command.CommandData.NoOfYears);

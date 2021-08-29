@@ -27,12 +27,13 @@ namespace FabricGroup.TestTask.Ledger.Tests
         {
             _command.Load("PAYMENT IDIDI Dale 1000 5");
 
+            Assert.AreEqual(new BankBorrower("IDIDI", "Dale"), _command.CommandData.BankBorrower);
             Assert.AreEqual(5, _command.CommandData.EmiNo);
             Assert.AreEqual(1000, _command.CommandData.LumpAmount);
         }
 
         [Test]
-        public async Task TestExecuteNoBorrower()
+        public void TestExecuteNoBorrower()
         {
             _command.CommandData = new PaymentCommand.Data(_bb, 100, 5);
             var context = new LedgerContext();

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using FabricGroup.TestTask.ConsoleRunner.Ledger;
 using FabricGroup.TestTask.ConsoleRunner.Ledger.Commands;
@@ -21,6 +22,16 @@ namespace FabricGroup.TestTask.Ledger.Tests
             _processor.RegisterCommand("loan", () => new LoanCommand());
             _processor.RegisterCommand("payment", () => new PaymentCommand());
             _processor.RegisterCommand("balance", () => new BalanceCommand(new BalanceCalculator()));
+        }
+
+        [Test]
+        public void TestIUnknownCommand()
+        {
+            var input = new[]
+            {
+                "test 1 1 2",
+            };
+            Assert.Throws<ApplicationException>(() => _ = _processor.Load(input).ToList());
         }
         [Test]
         public void TestLoad()

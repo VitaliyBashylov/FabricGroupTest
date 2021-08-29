@@ -28,10 +28,11 @@ namespace FabricGroup.TestTask.Ledger.Tests
         {
             _command.Load("BALANCE IDIDI Dale 3");
 
+            Assert.AreEqual(new BankBorrower("IDIDI", "Dale"), _command.CommandData.BankBorrower);
             Assert.AreEqual(3, _command.CommandData.EmiNo);
         }
         [Test]
-        public async Task TestNoBorrower()
+        public void TestNoBorrower()
         {
             _command.CommandData = new BalanceCommand.Data(_bb, 1);
             Assert.ThrowsAsync<ApplicationException>(() => _command.Execute(_context, _output));
